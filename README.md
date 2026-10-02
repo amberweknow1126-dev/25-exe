@@ -1,0 +1,87 @@
+
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#050708"><title>25.exe</title>
+<style>
+:root{--fg:#d9dfdd;--dim:#788486;--line:#4e5c60;--panel:rgba(4,8,10,.94)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#020304;color:var(--fg);font-family:"Courier New",monospace;overflow:hidden}
+button{font:inherit;color:var(--fg);background:#091014;border:1px solid var(--line);padding:11px 14px;cursor:pointer;touch-action:manipulation}
+#game{height:100dvh;position:relative;overflow:hidden;background:#070a0c}.scan,.vig{position:absolute;inset:0;pointer-events:none;z-index:40}.scan{background:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px)}.vig{box-shadow:inset 0 0 130px 25px #000b}
+#scene{position:absolute;inset:0 0 150px;overflow:hidden}.label{position:absolute;left:6%;top:12%;font-size:clamp(22px,4vw,43px);color:#899496;text-shadow:2px 2px #000}
+#hud{position:absolute;z-index:45;background:#030506cc;padding:6px 8px;left:14px;right:14px;top:max(12px,env(safe-area-inset-top));display:flex;justify-content:space-between;font-size:10px;color:#788486;letter-spacing:.12em}
+#inv{position:absolute;z-index:45;left:14px;bottom:154px;font-size:11px;color:#aab4b4;background:#030506;padding:6px 8px;border:1px solid #384548}
+#dialog{position:absolute;z-index:50;left:5%;right:5%;bottom:max(15px,env(safe-area-inset-bottom));min-height:120px;background:#030506;border:2px solid #8b989a;padding:18px 20px;box-shadow:0 0 0 2px #000}
+#speaker{font-size:10px;color:#7b888a;letter-spacing:.15em;margin-bottom:7px}#text{font-size:18px;line-height:1.7;white-space:pre-line}#opts{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.hot{position:absolute;border:0;background:transparent}.hot:active{background:#dbe5e522}.tag{display:none}
+.store{position:absolute;right:4%;top:24%;width:55%;height:48%;border:2px solid #354347;background:#10181b}.store:before{content:"24H";position:absolute;left:8%;top:7%;color:#667477}.glass{position:absolute;right:9%;top:31%;width:22%;height:41%;border:1px solid #536165;background:#111a1d}.vending{position:absolute;left:5%;top:34%;width:17%;height:38%;border:2px solid #354347;background:#10171a}.road{position:absolute;left:0;right:0;bottom:0;height:28%;border-top:1px solid #283337;background:#06090a}
+.stair{position:absolute;left:7%;right:10%;bottom:12%;height:10%;border-top:2px solid #485558;transform:skewX(-32deg);box-shadow:0 -42px 0 -40px #596669,0 -84px 0 -82px #596669,0 -126px 0 -124px #596669}.wall{position:absolute;inset:0;background:linear-gradient(125deg,#11191c,#070a0c 65%)}.phone{position:absolute;right:17%;top:35%;width:13%;height:24%;border:4px solid #283337;background:#05090b}.photo{position:absolute;left:16%;top:29%;width:24%;height:24%;border:5px solid #222c2f;background:#0b1012}
+.finaldoor{position:absolute;left:38%;top:17%;width:25%;height:63%;border:3px solid #39474a;background:#0b1012}.finaldoor:after{content:"";position:absolute;right:10%;top:50%;width:7px;height:7px;border:1px solid #758184}
+.crt{position:absolute;left:12%;top:30%;width:30%;height:28%;border:7px solid #273235;background:#061012;box-shadow:inset 0 0 25px #17282a}.table{position:absolute;left:44%;bottom:18%;width:35%;height:7%;background:#242c2e}.cake{position:absolute;left:55%;bottom:25%;font-size:55px;filter:grayscale(1)}
+#overlay{position:absolute;z-index:100;inset:0;background:#030506;display:flex;flex-direction:column;justify-content:center;padding:8%}#overlay h1{font-size:clamp(52px,10vw,100px);font-weight:400;margin:0 0 18px;text-shadow:3px 0 #293638}.term{white-space:pre-line;line-height:1.8;font-size:clamp(14px,2vw,19px);max-width:760px}#overlay button{width:max-content;margin-top:20px}.hidden{display:none!important}
+.glitch{animation:g .12s 4}@keyframes g{25%{transform:translate(4px,-1px)}50%{transform:translate(-4px,2px)}75%{transform:translate(2px,1px)}}
+@media(max-width:680px){#scene{bottom:210px}#dialog{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));min-height:190px;padding:14px}#opts{display:grid;grid-template-columns:1fr}#opts button{width:100%;text-align:left;min-height:48px;font-size:16px}#inv{bottom:216px}.label{top:17%;font-size:27px}.store{right:-8%;width:72%}.vending{left:1%;width:25%}#overlay{padding:calc(55px + env(safe-area-inset-top)) 22px calc(40px + env(safe-area-inset-bottom))}#overlay h1{font-size:56px}}
+</style></head><body><div id="game"><div id="scene"></div><div class="scan"></div><div class="vig"></div>
+<div id="hud"><span>25.exe / 存档槽01</span><span id="objective">读取存档</span></div><div id="inv">背包：空</div>
+<div id="dialog"><div id="speaker">系统</div><div id="text">……</div><div id="opts"></div></div>
+<div id="overlay"><h1>25.exe</h1><div class="term">检测到未知存档。
+
+玩家年龄：24
+存档完整度：0%
+最后写入：00:00
+
+部分记忆已经损坏。
+恢复它们，才能继续写入。</div><button onclick="start()">[ 读取存档 ]</button></div></div>
+<script>
+const S=document.getElementById('scene'),SP=document.getElementById('speaker'),T=document.getElementById('text'),O=document.getElementById('opts'),I=document.getElementById('inv'),Q=document.getElementById('objective'),OV=document.getElementById('overlay'),G=document.getElementById('game');
+let bag=[],f={},no=0,audio;
+function tone(x=520,d=.04){try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();let o=audio.createOscillator(),g=audio.createGain();o.frequency.value=x;g.gain.value=.012;o.connect(g);g.connect(audio.destination);o.start();o.stop(audio.currentTime+d)}catch(e){}}
+function say(n,t,b=[]){SP.textContent=n;T.textContent=t;O.innerHTML='';b.forEach(x=>{let z=document.createElement('button');z.textContent=x[0];z.onclick=()=>{tone();x[1]()};O.appendChild(z)})}
+function add(x){if(!bag.includes(x))bag.push(x);I.textContent='背包：'+bag.join(' / ')}
+function err(){tone(120,.12);G.classList.remove('glitch');void G.offsetWidth;G.classList.add('glitch')}
+function start(){audio=audio||new(window.AudioContext||window.webkitAudioContext)();OV.classList.add('hidden');store()}
+function store(){Q.textContent='目标：调查便利店外';S.innerHTML=`<div class="road"></div><div class="store"></div><div class="glass"></div><div class="vending"></div><div class="label">便利店外 / 00:00</div><button class="hot" style="left:3%;top:30%;width:23%;height:47%" onclick="vend()"></button><span class="tag" style="left:5%;top:31%">自动售货机</span><button class="hot" style="left:34%;top:50%;width:20%;height:18%" onclick="receipt()"></button><span class="tag" style="left:36%;top:51%">地上的小票</span><button class="hot" style="right:5%;top:27%;width:29%;height:49%" onclick="glass()"></button><span class="tag" style="right:8%;top:29%">玻璃门</span>`;say('系统','凌晨。便利店刚刚关上门。\\n三个地方看起来有些不对劲。')}
+function vend(){f.a=1;add('空汽水罐');say('自动售货机','出货口卡着一只空汽水罐。\\n罐底被划了一句话：\\n“我没走。”',[['[ 收好 ]',check]])}
+function receipt(){f.b=1;add('褪色小票');say('褪色小票','时间栏只剩：03:__\\n背面写着：\\n“有些晚上，不需要解决。”',[['[ 收好 ]',check]])}
+function glass(){f.c=1;say('玻璃门','门框上有两道新的划痕：\\n\\n1 7\\n\\n玻璃里只剩夜街的倒影。',[['[ 记住 17 ]',check]])}
+function check(){if(f.a&&f.b&&f.c)say('系统','线索可以拼起来：\\n03:__ + 17 = 03:17',[['[ 输入 0317 ]',stairs]]);else say('系统','还缺线索。继续调查。')}
+function stairs(){Q.textContent='目标：恢复03:17的记忆';S.innerHTML=`<div class="wall"></div><div class="stair"></div><div class="phone"></div><div class="photo"></div><div class="label">公寓楼梯 / 03:17</div><button class="hot" style="left:5%;bottom:6%;width:56%;height:28%" onclick="step()"></button><span class="tag" style="left:8%;bottom:29%">台阶</span><button class="hot" style="right:12%;top:29%;width:23%;height:35%" onclick="phone()"></button><span class="tag" style="right:15%;top:31%">旧手机</span><button class="hot" style="left:12%;top:24%;width:32%;height:34%" onclick="photo()"></button><span class="tag" style="left:15%;top:26%">旧照片</span>`;say('系统','03:17。\\n远处有车声。这里没有其他人。')}
+function step(){f.r=1;add('银色拉环');say('台阶','缝里压着一枚汽水罐拉环。\\n和背包里的空罐属于同一种饮料。')}
+function photo(){f.p=1;add('旧照片');say('旧照片','两个人都没看镜头。\\n照片背后写着：\\n“谁也没说服谁。”')}
+function phone(){if(!f.r)return say('旧手机','需要四位解锁码。\\n提示：不是生日。');say('旧手机','锁屏提示：\\n“那天最后一次看时间，是几点？”',[['[ 0317 ]',memory],['[ 0025 ]',()=>{err();say('旧手机','密码错误。',[['[ 重试 ]',phone]])}]])}
+function memory(){add('记忆碎片01');say('记忆01','03:17。\\n你一句话都不想说。\\n她也没逼你解释。\\n\\n她只是坐在那里。',[['[ 继续 ]',quiz]])}
+function quiz(){say('记忆终端','你们吵起来的时候，最后通常是谁说服谁？',[['她说服我',wrong],['我说服她',wrong],['谁也没说服谁',unlock]])}
+function wrong(){err();say('记忆终端','不对。\\n你们两个哪有这么容易被说服。',[['[ 再选 ]',quiz]])}
+function unlock(){add('记忆碎片02');say('记忆已恢复','那些吵架的、冷战的、一起发疯的、一起熬夜的……\\n\\n原来这些也算存档。',[['[ 前往最后的门 ]',door]])}
+function door(){Q.textContent='目标：通过最终验证';S.innerHTML=`<div class="wall"></div><div class="finaldoor"></div><div class="label">最后的门</div><button class="hot" style="left:34%;top:13%;width:34%;height:70%" onclick="verify()"></button>`;say('系统','门上没有钥匙孔。\\n只有一句：回答正确，才允许继续写入。')}
+function verify(){say('最终验证','这个存档为什么一直没有被删除？',[['因为任务没完成',wf],['因为系统故障',wf],['因为有人一直没有离开',room]])}
+function wf(){err();say('最终验证','错误。\\n这个答案太像游戏了。',[['[ 再回答 ]',verify]])}
+function room(){Q.textContent='目标：完成最后一次存档';S.innerHTML=`<div class="wall"></div><div class="crt"></div><div class="table"></div><div class="cake">🎂</div><div class="label">ROOM 25</div><button class="hot" style="left:8%;top:25%;width:38%;height:39%" onclick="save()"></button><span class="tag" style="left:11%;top:27%">存档终端</span><button class="hot" style="right:15%;bottom:17%;width:31%;height:31%" onclick="cake()"></button><span class="tag" style="right:18%;bottom:44%">生日蛋糕</span>`;say('系统','门开了。\\n房间里只有一台旧终端和一个蛋糕。')}
+function cake(){say('生日蛋糕','蜡烛是 2 和 5。\\n旁边写着：\\n“先存档，再许愿。”')}
+function save(){say('存档终端','是否更新存档？\\n\\n24 → 25',[['[ 是 ]',yes],['[ 不 ]',nope]])}
+function nope(){no++;let m=['输入被拒绝。','别点了。','你25了，认命吧。','“不”选项已被删除。'][Math.min(no-1,3)];say('存档终端','24 → 25\\n\\n'+m,[['[ 是 ]',yes],...(no<4?[['[ 不 ]',nope]]:[])])}
+function yes(){OV.classList.remove('hidden');OV.innerHTML=`<div class="term">正在写入存档……
+
+████████████████████ 100%
+
+存档完成。</div>`;setTimeout(()=>OV.innerHTML=`<div class="term">玩家资料已更新</div><h1>25岁。</h1><div class="term">生日快乐。
+
+我们还是会吵架，
+还是会有听不懂彼此的时候。
+
+但很多个我过不去的晚上，
+你都没有走。
+
+新的一岁，
+你继续讲你的道理。
+我尽量少发一点疯。
+
+……尽量。</div><button onclick="ending()">[ 继续一起活到下一个存档点 ]</button>`,1100)}
+function ending(){OV.innerHTML=`<div class="term">下一个存档点：未知
+玩家状态：在线
+同行状态：已连接
+
+这不是结局。
+只是新的存档点。
+
+谢谢你一直在。</div><button onclick="location.reload()">[ 重新开始 ]</button>`}
+</script></body></html>
